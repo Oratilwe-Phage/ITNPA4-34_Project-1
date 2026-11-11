@@ -37,7 +37,7 @@ lemmatizer = WordNetLemmatizer()
 
 
 st.set_page_config(
-    page_title="Researchly Research Abstract Classifier",
+    page_title="Oratilwe Phage_Researchly Research Abstract Classifier",
     page_icon="📚",
     layout="centered"
 )
