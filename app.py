@@ -126,19 +126,14 @@ user_input = st.text_area(
 
 if st.button("Classify Abstract", type="primary"):
 
-    # Checking whether the user entered text
     if not user_input.strip():
 
         st.warning("Please enter a valid research abstract.")
 
     else:
 
-        # Preprocessing the user-entered abstract
+        # Preprocessing the entered abstract
         cleaned_input = clean_text(user_input)
-
-       
-        # Keyword-based classification
-      
 
         # Defining AI-related keywords
         ai_keywords = [
@@ -150,46 +145,43 @@ if st.button("Classify Abstract", type="primary"):
             "healthcare"
         ]
 
-        # Checking whether the abstract contains AI keywords
+        # Checking for AI-related keywords
         is_ai = any(
             keyword in cleaned_input
             for keyword in ai_keywords
         )
 
-        # Assigning the predicted category
+        # Assigning the prediction
         if is_ai:
-
             prediction_label = "artificial intelligence"
-
         else:
-
             prediction_label = "classical research"
 
-       
-# Displaying the prediction heading
-st.markdown("### Prediction")
+        # Displaying the prediction heading
+        st.markdown("### Prediction")
 
-# Displaying the classification result using HTML styling
-st.markdown(
-    f"""
-    <div style="
-        background-color: #DCFCE7;
-        padding: 16px;
-        border-radius: 8px;
-        border: 1px solid #BBF7D0;
-    ">
-        <p style="
-            color: #166534;
-            font-size: 16px;
-            margin: 0;
-        ">
-            <b>The abstract is classified as:
-            {prediction_label}</b>
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+        # Displaying the prediction result
+        st.markdown(
+            f"""
+            <div style="
+                background-color: #DCFCE7;
+                padding: 16px;
+                border-radius: 8px;
+                border: 1px solid #BBF7D0;
+            ">
+                <p style="
+                    color: #166534;
+                    font-size: 16px;
+                    margin: 0;
+                ">
+                    <b>The abstract is classified as:
+                    {prediction_label}</b>
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
 
 
 # 9. Application footer
