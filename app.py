@@ -166,37 +166,30 @@ if st.button("Classify Abstract", type="primary"):
             prediction_label = "classical research"
 
        
-        # Displaying the prediction
-       
-        st.markdown("### Prediction")
+# Displaying the prediction heading
+st.markdown("### Prediction")
 
-        # Displaying prediction using a styled result box
-        st.markdown(
-            f"""
-            <div style='background-color: #DCFCE7;
-                        padding: 16px;
-                        border-radius: 8px;
-                        border: 1px solid #BBF7D0;'>
-
-                <p style='color: #166534;
-                          font-size: 16px;
-                          margin: 0;'>
-
-                    <b>The abstract is classified as:
-                    {prediction_label}</b>
-
-                </p>
-
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-        # Displaying a short explanation
-        st.caption(
-            "Classification is currently based on keyword matching."
-        )
-
+# Displaying the classification result using HTML styling
+st.markdown(
+    f"""
+    <div style="
+        background-color: #DCFCE7;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid #BBF7D0;
+    ">
+        <p style="
+            color: #166534;
+            font-size: 16px;
+            margin: 0;
+        ">
+            <b>The abstract is classified as:
+            {prediction_label}</b>
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # 9. Application footer
