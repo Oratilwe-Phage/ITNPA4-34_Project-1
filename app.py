@@ -1,249 +1,194 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "id": "9cd55700-8319-459c-9b47-f9e8d80cd64a",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "2026-11-12 11:49:29.670 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.757 \n",
-      "  \u001b[33m\u001b[1mWarning:\u001b[0m to view this Streamlit app on a browser, run it with the following\n",
-      "  command:\n",
-      "\n",
-      "    streamlit run /opt/anaconda3/lib/python3.13/site-packages/ipykernel_launcher.py [ARGUMENTS]\n",
-      "2026-11-12 11:49:29.758 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.758 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.758 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.929 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.929 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.930 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.930 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.930 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.930 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.931 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.932 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.932 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.932 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.933 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.933 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.933 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.933 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.933 Session state does not function when running a script without `streamlit run`\n",
-      "2026-11-12 11:49:29.934 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.934 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.934 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.934 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.934 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.934 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.935 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.935 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-11-12 11:49:29.935 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n"
-     ]
-    }
-   ],
-   "source": [
-    "# Researchly Research Abstract Classifier\n",
-    "# Question 2.3 - Streamlit Application\n",
-    "\n",
-    "import streamlit as st\n",
-    "import re\n",
-    "import string\n",
-    "import nltk\n",
-    "\n",
-    "from nltk.corpus import stopwords\n",
-    "from nltk.stem import WordNetLemmatizer\n",
-    "\n",
-    "\n",
-    "# 1. Downloading required NLTK resources\n",
-    "\n",
-    "@st.cache_resource\n",
-    "def load_nltk_resources():\n",
-    "    nltk.download(\"stopwords\", quiet=True)\n",
-    "    nltk.download(\"wordnet\", quiet=True)\n",
-    "    nltk.download(\"omw-1.4\", quiet=True)\n",
-    "\n",
-    "load_nltk_resources()\n",
-    "\n",
-    "\n",
-    "# 2. Page configuration\n",
-    "\n",
-    "st.set_page_config(\n",
-    "    page_title=\"Researchly Research Abstract Classifier\",\n",
-    "    layout=\"centered\"\n",
-    ")\n",
-    "\n",
-    "\n",
-    "# 3. Application heading\n",
-    "\n",
-    "st.markdown(\n",
-    "    \"\"\"\n",
-    "    <h1 style='color: #1E293B;'>\n",
-    "    Researchly Research Abstract Classifier\n",
-    "    </h1>\n",
-    "\n",
-    "    <p style='font-size: 16px; color: #475569;'>\n",
-    "    This app classifies research abstracts as either\n",
-    "    AI-related or classical research.\n",
-    "    </p>\n",
-    "    \"\"\",\n",
-    "    unsafe_allow_html=True\n",
-    ")\n",
-    "\n",
-    "\n",
-    "# 4. Text preprocessing\n",
-    "\n",
-    "lemmatizer = WordNetLemmatizer()\n",
-    "stop_words = set(stopwords.words(\"english\"))\n",
-    "\n",
-    "def clean_text(text):\n",
-    "\n",
-    "    # Convert text to lowercase\n",
-    "    text = text.lower()\n",
-    "\n",
-    "    # Remove URLs\n",
-    "    text = re.sub(r\"http\\S+|www\\S+\", \"\", text)\n",
-    "\n",
-    "    # Remove HTML tags\n",
-    "    text = re.sub(r\"<.*?>\", \"\", text)\n",
-    "\n",
-    "    # Remove numbers\n",
-    "    text = re.sub(r\"\\d+\", \"\", text)\n",
-    "\n",
-    "    # Remove punctuation\n",
-    "    text = text.translate(\n",
-    "        str.maketrans(\"\", \"\", string.punctuation)\n",
-    "    )\n",
-    "\n",
-    "    # Tokenise text\n",
-    "    tokens = text.split()\n",
-    "\n",
-    "    # Remove stopwords and lemmatise words\n",
-    "    cleaned_tokens = [\n",
-    "        lemmatizer.lemmatize(token)\n",
-    "        for token in tokens\n",
-    "        if token not in stop_words and len(token) > 2\n",
-    "    ]\n",
-    "\n",
-    "    return \" \".join(cleaned_tokens)\n",
-    "\n",
-    "\n",
-    "# 5. Abstract input\n",
-    "\n",
-    "st.write(\"Enter research abstract:\")\n",
-    "\n",
-    "default_text = (\n",
-    "    \"Artificial intelligence has become a transformative \"\n",
-    "    \"technology in healthcare by enabling more accurate \"\n",
-    "    \"diagnosis, predictive analytics, and personalised \"\n",
-    "    \"treatment planning. Machine learning algorithms can \"\n",
-    "    \"analyse large volumes of medical data to identify \"\n",
-    "    \"patterns that assist clinicians in detecting diseases \"\n",
-    "    \"at earlier stages.\"\n",
-    ")\n",
-    "\n",
-    "user_input = st.text_area(\n",
-    "    \"Research abstract\",\n",
-    "    value=default_text,\n",
-    "    height=180,\n",
-    "    label_visibility=\"collapsed\"\n",
-    ")\n",
-    "\n",
-    "\n",
-    "# 6. Classification\n",
-    "\n",
-    "if st.button(\"Classify Abstract\", type=\"primary\"):\n",
-    "\n",
-    "    if not user_input.strip():\n",
-    "\n",
-    "        st.warning(\"Please enter a valid research abstract.\")\n",
-    "\n",
-    "    else:\n",
-    "\n",
-    "        # Preprocess the abstract\n",
-    "        cleaned_input = clean_text(user_input)\n",
-    "\n",
-    "        # Keyword-based demonstration classifier\n",
-    "        ai_keywords = [\n",
-    "            \"artificial intelligence\",\n",
-    "            \"machine learning\",\n",
-    "            \"deep learning\",\n",
-    "            \"neural\",\n",
-    "            \"algorithm\",\n",
-    "            \"healthcare\"\n",
-    "        ]\n",
-    "\n",
-    "        # Determine classification\n",
-    "        is_ai = any(\n",
-    "            keyword in cleaned_input\n",
-    "            for keyword in ai_keywords\n",
-    "        )\n",
-    "\n",
-    "        if is_ai:\n",
-    "            prediction_label = \"Artificial Intelligence\"\n",
-    "        else:\n",
-    "            prediction_label = \"Classical Research\"\n",
-    "\n",
-    "\n",
-    "        # 7. Display prediction\n",
-    "\n",
-    "        st.markdown(\"### Prediction\")\n",
-    "\n",
-    "        st.markdown(\n",
-    "            f\"\"\"\n",
-    "            <div style='background-color: #DCFCE7;\n",
-    "                        padding: 16px;\n",
-    "                        border-radius: 8px;\n",
-    "                        border: 1px solid #BBF7D0;'>\n",
-    "                <p style='color: #166534;\n",
-    "                          font-size: 16px;\n",
-    "                          margin: 0;'>\n",
-    "                    <b>The abstract is classified as:\n",
-    "                    {prediction_label}</b>\n",
-    "                </p>\n",
-    "            </div>\n",
-    "            \"\"\",\n",
-    "            unsafe_allow_html=True\n",
-    "        )\n",
-    "\n",
-    "        st.caption(\n",
-    "            \"Note: This demonstration uses keyword-based \"\n",
-    "            \"classification rather than the trained ML model.\"\n",
-    "        )"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "e061566d-b346-423f-964c-b38ec074fb2b",
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3 (ipykernel)",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.13.9"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+# Researchly Research Abstract Classifier
+# Streamlit Public Application
+
+# 1. Importing the required libraries
+import streamlit as st
+import re
+import string
+import nltk
+
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
+
+
+# 2. Downloading required NLTK resources
+
+
+# Downloading English stopwords and WordNet resources
+nltk.download("stopwords", quiet=True)
+nltk.download("wordnet", quiet=True)
+nltk.download("omw-1.4", quiet=True)
+
+
+
+# 3. Loading preprocessing resources
+
+
+# Loading English stopwords
+stop_words = set(stopwords.words("english"))
+
+# Initialising the lemmatizer
+lemmatizer = WordNetLemmatizer()
+
+
+
+# 4. Page configuration
+
+
+st.set_page_config(
+    page_title="Oratilwe Phage_Researchly Research Abstract Classifier",
+    page_icon="📚",
+    layout="centered"
+)
+
+
+
+# 5. Application header
+
+
+st.markdown(
+    """
+    <h1 style='color: #1E293B;'>
+        Researchly Research Abstract Classifier
+    </h1>
+
+    <p style='font-size: 16px; color: #475569;'>
+        This app classifies research abstracts as either
+        AI-related or classical research.
+    </p>
+    """,
+    unsafe_allow_html=True
+)
+
+
+
+# 6. Text preprocessing function
+
+def clean_text(text):
+
+    # Converting text to lowercase
+    text = text.lower()
+
+    # Removing URLs
+    text = re.sub(r"http\S+|www\S+", "", text)
+
+    # Removing HTML tags
+    text = re.sub(r"<.*?>", "", text)
+
+    # Removing numbers
+    text = re.sub(r"\d+", "", text)
+
+    # Removing punctuation
+    text = text.translate(
+        str.maketrans("", "", string.punctuation)
+    )
+
+    # Tokenising the text
+    tokens = text.split()
+
+    # Removing stopwords and short words
+    tokens = [
+        lemmatizer.lemmatize(token)
+        for token in tokens
+        if token not in stop_words and len(token) > 2
+    ]
+
+    # Returning cleaned text
+    return " ".join(tokens)
+
+
+
+# 7. User input section
+
+st.write("Enter research abstract:")
+
+# Providing a default example abstract
+default_text = (
+    "Artificial intelligence (AI) has become a transformative "
+    "technology in healthcare by enabling more accurate diagnosis, "
+    "predictive analytics, and personalised treatment planning. "
+    "Machine learning algorithms can analyse large volumes of "
+    "medical data to identify patterns that assist clinicians "
+    "in detecting diseases at earlier stages."
+)
+
+# Creating the abstract input text area
+user_input = st.text_area(
+    "Research Abstract",
+    value=default_text,
+    height=180
+)
+
+
+
+# 8. Classification button
+
+if st.button("Classify Abstract", type="primary"):
+
+    if not user_input.strip():
+
+        st.warning("Please enter a valid research abstract.")
+
+    else:
+
+        # Preprocessing the entered abstract
+        cleaned_input = clean_text(user_input)
+
+        # Defining AI-related keywords
+        ai_keywords = [
+            "artificial intelligence",
+            "machine learning",
+            "deep learning",
+            "neural",
+            "algorithm",
+            "healthcare"
+        ]
+
+        # Checking for AI-related keywords
+        is_ai = any(
+            keyword in cleaned_input
+            for keyword in ai_keywords
+        )
+
+        # Assigning the prediction
+        if is_ai:
+            prediction_label = "artificial intelligence"
+        else:
+            prediction_label = "classical research"
+
+        # Displaying the prediction heading
+        st.markdown("### Prediction")
+
+        # Displaying the prediction result
+        st.markdown(
+            f"""
+            <div style="
+                background-color: #DCFCE7;
+                padding: 16px;
+                border-radius: 8px;
+                border: 1px solid #BBF7D0;
+            ">
+                <p style="
+                    color: #166534;
+                    font-size: 16px;
+                    margin: 0;
+                ">
+                    <b>The abstract is classified as:
+                    {prediction_label}</b>
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+
+
+# 9. Application footer
+
+
+st.markdown("---")
+
+st.caption(
+    "Researchly | Research Abstract Classification"
+)
