@@ -12,6 +12,9 @@ Researchly is a comprehensive Natural Language Processing (NLP) and Machine Lear
 ## 🧩 Repository Structure
 
 ### For Data and Notebooks
+- Data:
+  - This contains all the datasets used for this Project
+    
 - Question 1:
   - Python Script for Question 1
  
